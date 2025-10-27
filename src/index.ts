@@ -4,15 +4,14 @@ import cors from 'cors';
 import authenticatedRoutes from './routes/UnauthenticatedRoutes.js';
 import auth from './middlewares/auth.js';
 import UnauthenticatedRoutes from './routes/UnauthenticatedRoutes.js';
+import users from './appLogic/users/userController.js';
 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req:Request, res:Response)=>{
-    res.send("churras meu nobre");
-});
+app.get('/', users.listar);
 
 //routes
 app.use(UnauthenticatedRoutes);

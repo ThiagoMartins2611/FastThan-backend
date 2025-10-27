@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import  jwt  from "jsonwebtoken";
-
-interface AuthRequest extends Request{
-    usuarioId?:string
-}
+import { AuthRequest } from "./authRequest.js";
 
 class Auth{
 
@@ -23,7 +20,7 @@ class Auth{
                 return res.status(401).json({mensagem:"ERRO VALIDAÇÃO DO TOKEN Token invalido"});
             }
 
-            if(typeof decoded === "string" || !decoded || !("usuarioId" in decoded)){
+            if(typeof decoded === "string" || !decoded || !("userId" in decoded)){
                 return res.status(401).json({mensagem:"PayLoad invalido"});
             }
 
