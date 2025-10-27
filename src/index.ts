@@ -5,6 +5,7 @@ import authenticatedRoutes from './routes/UnauthenticatedRoutes.js';
 import auth from './middlewares/auth.js';
 import UnauthenticatedRoutes from './routes/UnauthenticatedRoutes.js';
 
+
 const app = express();
 app.use(cors());
 app.use(express.json());
