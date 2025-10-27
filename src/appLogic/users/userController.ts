@@ -3,7 +3,6 @@ import { Response } from "express"
 import db from "../../database/mongo_database.js";
 import UserEntity from "./userEntity.js";
 import bcrypt from "bcrypt"
-import { Collection } from "mongodb";
 import jwt  from "jsonwebtoken"
 import { AuthRequest } from "../../middlewares/authRequest.js";
 
@@ -16,7 +15,7 @@ function randomNumber(min:number, max:number) {
 }
 
 
-class userController{
+class UserController{
 
     async add(req:AuthRequest, res:Response){
 
@@ -68,7 +67,7 @@ class userController{
 
 }
 
-export default new userController()
+export default new UserController()
 
 
 

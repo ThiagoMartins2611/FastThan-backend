@@ -1,17 +1,18 @@
 import 'dotenv/config'
-import express, { Response, Request } from 'express';
+import express from 'express';
 import cors from 'cors';
 import authenticatedRoutes from './routes/UnauthenticatedRoutes.js';
 import auth from './middlewares/auth.js';
 import UnauthenticatedRoutes from './routes/UnauthenticatedRoutes.js';
-import users from './appLogic/users/userController.js';
+
+import itensController from './appLogic/itens/itensController.js';
 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/', users.listar);
+app.get('/', itensController.listar);
 
 //routes
 app.use(UnauthenticatedRoutes);
