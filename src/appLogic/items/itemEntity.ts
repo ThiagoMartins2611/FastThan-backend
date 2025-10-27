@@ -17,6 +17,8 @@ class itemEntity{
         this.price = price
         this.imageUrl = imageUrl
         this.description = description
+
+        //esse Id é do usuario que colocou o item a venda
         this.userId = userId
     }
 

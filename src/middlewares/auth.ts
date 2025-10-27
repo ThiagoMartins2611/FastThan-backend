@@ -24,7 +24,7 @@ class Auth{
                 return res.status(401).json({mensagem:"PayLoad invalido"});
             }
 
-            req.usuarioId = decoded.usuarioId;
+            req.userId = decoded.usuarioId;
 
             next()
         });
