@@ -14,11 +14,6 @@ app.use(express.json());
 
 //routes
 app.use(unauthenticatedRoutes);
-
-app.get("/test", (req:Request, res:Response)=>{
-    res.send({mensagem:"churras testando"})
-})
-
 app.use(Auth.userAuth);
 app.use(authenticatedRoutes);
 

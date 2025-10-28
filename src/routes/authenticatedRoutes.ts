@@ -11,12 +11,11 @@ authenticatedRoutes.get("/ShowCart", cartsController.toListItem);
 //listar usuarios (adm)
 authenticatedRoutes.get("/ShowUsers", userController.toList);
 
+//listar usuarios (adm)
+authenticatedRoutes.delete("/deleteUser", userController.deleteUser);
 
 
-//listar todos os itens (funcionando)
-authenticatedRoutes.get("/ShowItems", itemsController.toList);
-
-//listar os intens que estão no carrinho do usuario 
+//listar os intens que estão no carrinho do usuario (funcionando)
 authenticatedRoutes.get("ShowItemsInCart", cartsController.toListItem)
 
 //colocar itens para vender (funcionando)
