@@ -1,11 +1,11 @@
 
-import { Request, Response } from "express"
+import { Response } from "express"
 import db from "../../database/mongo_database.js";
 import { ObjectId } from "bson";
 import { AuthRequest } from "../../middlewares/authRequest.js";
 import Cart from "./cartEntity.js";
 import ItemCart from "./itemCart.js";
-import { stringify } from "querystring";
+
 
 
 interface ItemDTO {
@@ -18,11 +18,6 @@ interface ItemDTO {
 }
 
 class CartsController{
-    //adicionar Item
-    //remover item
-    //atualizar quantity
-    //listar
-    //apagar
 
     async addItem(req:AuthRequest, res:Response){
 
@@ -89,8 +84,10 @@ class CartsController{
     }
 
 
-    async toListItem(req:Request, res:Response){
-        const {userId} = req.body as {userId:string}
+    async toListItem(req:AuthRequest, res:Response){
+        const userId = req.userId;
+        if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"})
+
         const Cart = await db.collection<Cart>('carts').findOne({userId: userId});
         
 
@@ -98,9 +95,12 @@ class CartsController{
     }
 
 
-    async removeItem(req:Request, res:Response){
+    async removeItem(req:AuthRequest, res:Response){
 
-        const {itemId, userId} = req.body as {itemId: string, userId: string};
+        const {itemId} = req.body as {itemId: string};
+        const userId = req.userId;
+
+        if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"})
 
         const CartA = await db.collection<Cart>('carts').findOne({userId:userId});
         
@@ -132,9 +132,12 @@ class CartsController{
  
     }
 
-    async updatequantity(req:Request, res:Response){
+    async updatequantity(req:AuthRequest, res:Response){
         
-        const {itemId, userId, quantity} = req.body as {itemId: string, userId: string, quantity: number};
+        const {itemId, quantity} = req.body as {itemId: string, quantity: number};
+        const userId = req.userId;
+
+        if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"})
         
         const CartA = await db.collection<Cart>('carts').findOne({userId:userId});
         if(!CartA){
@@ -174,8 +177,11 @@ class CartsController{
     }
 
 
-    async eraseCart(req:Request, res:Response){
-        const {userId} = req.body as {userId: string}
+    async eraseCart(req:AuthRequest, res:Response){
+        
+        const userId = req.userId;
+
+        if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"})
 
         const resul = await db.collection("carts").deleteOne({userId: userId});
 
