@@ -3,10 +3,10 @@ import userController from "../appLogic/users/userController.js";
 
 const unauthenticatedRoutes = Router()
 
-//cadastrar o usuario
+//cadastrar o usuario (funcionando)
 unauthenticatedRoutes.post("/registration", userController.add);
 
-//fazer login do usuario
+//fazer login do usuario (funcionando)
 unauthenticatedRoutes.post("/login", userController.login);
 
 export default unauthenticatedRoutes;

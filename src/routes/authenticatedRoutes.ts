@@ -13,16 +13,16 @@ authenticatedRoutes.get("/ShowUsers", userController.toList);
 
 
 
-//listar todos os itens
+//listar todos os itens (funcionando)
 authenticatedRoutes.get("/ShowItems", itemsController.toList);
 
 //listar os intens que estão no carrinho do usuario
 authenticatedRoutes.get("ShowItemsInCart", cartsController.toListItem)
 
-//colocar itens para vender
+//colocar itens para vender (funcionando)
 authenticatedRoutes.post("/AddItemsForSale", itemsController.add);
 
-//colcoar um item no seu carrinho
+//colocoar um item no seu carrinho
 authenticatedRoutes.post("/AddItemsInCart", cartsController.addItem);
 
 //remover o item do carrinho
