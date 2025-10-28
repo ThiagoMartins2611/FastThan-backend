@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import authenticatedRoutes from './routes/authenticatedRoutes.js';
 import Auth from './middlewares/auth.js';
@@ -11,8 +11,14 @@ app.use(cors());
 app.use(express.json());
 
 
+
 //routes
 app.use(UnauthenticatedRoutes);
+
+app.get("/test", (req:Request, res:Response)=>{
+    res.send({mensagem:"churras testando"})
+})
+
 app.use(Auth.userAuth);
 app.use(authenticatedRoutes);
 
