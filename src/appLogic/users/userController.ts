@@ -1,5 +1,5 @@
 
-import { Request, Response } from "express"
+import { Response } from "express"
 import db from "../../database/mongo_database.js";
 import UserEntity from "./userEntity.js";
 import bcrypt from "bcrypt"
@@ -18,7 +18,7 @@ function randomNumber(min:number, max:number) {
 
 class UserController{
 
-    async add(req:Request, res:Response){
+    async add(req:AuthRequest, res:Response){
 
         const {name, age, email, key, adm} = req.body as {name:string, age:number, email:string, key:string, adm:boolean};
         
@@ -56,9 +56,8 @@ class UserController{
         
     }
 
-    async login(req:Request, res:Response){
+    async login(req:AuthRequest, res:Response){
         const {email, key} = req.body as {email:string, key:string}
-
         if(!(email || key)) return res.status(400).send({mensagem: "Email e key são obrigatorios"});
 
         const user = await db.collection<UserEntity>("users").findOne({email});
