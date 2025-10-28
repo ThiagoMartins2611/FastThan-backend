@@ -26,6 +26,7 @@ class CartsController{
 
         const {itemId, quantityItem} = req.body as {itemId:string, quantityItem:number};
         const userId = req.userId;
+        console.log(userId)
 
         if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"})
 

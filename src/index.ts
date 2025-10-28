@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import authenticatedRoutes from './routes/authenticatedRoutes.js';
 import Auth from './middlewares/auth.js';
-import unauthenticatedRoutes from './routes/unauthenticatedRoutes.js';
+import unauthenticatedRoutes from './routes/UnauthenticatedRoutes.js';
 
 
 const app = express();
