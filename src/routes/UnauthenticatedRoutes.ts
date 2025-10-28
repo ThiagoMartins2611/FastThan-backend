@@ -1,12 +1,12 @@
 import { Router } from "express";
 import userController from "../appLogic/users/userController.js";
 
-const UnauthenticatedRoutes = Router()
+const unauthenticatedRoutes = Router()
 
 //cadastrar o usuario
-UnauthenticatedRoutes.post("/registration", userController.add);
+unauthenticatedRoutes.post("/registration", userController.add);
 
 //fazer login do usuario
-UnauthenticatedRoutes.post("/login", userController.login);
+unauthenticatedRoutes.post("/login", userController.login);
 
-export default UnauthenticatedRoutes;
+export default unauthenticatedRoutes;

@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import authenticatedRoutes from './routes/authenticatedRoutes.js';
 import Auth from './middlewares/auth.js';
-import UnauthenticatedRoutes from './routes/UnauthenticatedRoutes.js';
+import unauthenticatedRoutes from './routes/unauthenticatedRoutes.js';
 
 
 const app = express();
@@ -13,7 +13,7 @@ app.use(express.json());
 
 
 //routes
-app.use(UnauthenticatedRoutes);
+app.use(unauthenticatedRoutes);
 
 app.get("/test", (req:Request, res:Response)=>{
     res.send({mensagem:"churras testando"})
