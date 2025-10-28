@@ -5,6 +5,7 @@ import UserEntity from "./userEntity.js";
 import bcrypt from "bcrypt"
 import jwt  from "jsonwebtoken"
 import { AuthRequest } from "../../middlewares/authRequest.js";
+import { ObjectId } from "bson";
 
 
 function randomNumber(min:number, max:number) {
@@ -37,14 +38,23 @@ class UserController{
         res.status(201).json({...user, _id: result.insertedId});
     }
 
+    async toList(req:AuthRequest, res:Response){
 
+        const userId = req.userId;
+        if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"});
 
-    async listar(req:AuthRequest, res:Response){
-        const users = await db.collection<UserEntity>('users').find().toArray();
-        res.status(200).json(users);
+        const usersCollection = db.collection<UserEntity>('users');
+        const thisUser = await usersCollection.findOne<UserEntity>({ _id: new ObjectId(userId) });
+
+        if (!thisUser) return res.status(404).json({ mensagem: "Usuário não encontrado" });
+
+        if(!thisUser.adm) return res.status(403).json({mensagem: "Sem permissão"});
+
+        const users = await usersCollection.find().toArray()
+        
+        return res.status(200).json({mensagem: "lista de usuarios", users: users});
+        
     }
-
-
 
     async login(req:AuthRequest, res:Response){
         const {email, key} = req.body as {email:string, key:string}
@@ -64,6 +74,7 @@ class UserController{
         res.status(200).json({token});
 
     }
+
 
 }
 

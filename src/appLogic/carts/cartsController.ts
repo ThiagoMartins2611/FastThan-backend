@@ -5,16 +5,19 @@ import { ObjectId } from "bson";
 import { AuthRequest } from "../../middlewares/authRequest.js";
 import Cart from "./cartEntity.js";
 import ItemCart from "./itemCart.js";
+import CartEntity from "./cartEntity.js";
+import UserEntity from "../users/userEntity.js";
+import itemEntity from "../items/itemEntity.js";
 
 
 
 interface ItemDTO {
     _id: ObjectId,
-    nome:string,
-    preco: number,
-    urlfoto:string,
+    name:string,
+    price: number,
+    imageUrl:string,
     userId:string
-    descricao: string
+    description: string
 }
 
 class CartsController{
@@ -36,7 +39,7 @@ class CartsController{
             return res.status(400).json({mensagem: "item não encontrado"})
         }
 
-        const itemCart = new ItemCart(item.nome, item.preco, item.urlfoto, item.descricao, item.userId, item._id.toString(), );
+        const itemCart = new ItemCart(item.name, item.price, item.imageUrl, item.description, item.userId, item._id.toString(), );
         itemCart.quantity = quantityItem;
         
         
@@ -86,12 +89,43 @@ class CartsController{
 
     async toListItem(req:AuthRequest, res:Response){
         const userId = req.userId;
+        const filter = req.query.filter;
+
         if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"})
 
         const Cart = await db.collection<Cart>('carts').findOne({userId: userId});
-        
+        if(!Cart) return res.status(401).send({mensagem: "carrinho com esse id de usuario não encontrado"})
 
-        res.status(200).json(Cart?.items);
+        const itemsCart = (Cart.items);
+
+        switch(filter){
+
+            case "":
+                res.status(200).json(itemsCart);
+            break;
+
+            case "maisCaro":
+                res.status(200).json(itemsCart.sort((a, b)=> b.price - a.price));
+            break;
+
+            case "menosCaro":
+                res.status(200).json(itemsCart.sort((a, b)=> a.price - b.price));
+            break;
+
+            case "maiorQuantidade": 
+                res.status(200).json(itemsCart.sort((a, b)=> b.quantity - a.quantity ));
+            break;
+
+            case "menorQuantidade":
+                res.status(200).json(itemsCart.sort((a, b)=> a.quantity - b.quantity));
+            break;
+
+            default: 
+                res.status(200).json(itemsCart);
+            break;
+
+        }
+
     }
 
 
@@ -131,6 +165,7 @@ class CartsController{
         }
  
     }
+
 
     async updatequantity(req:AuthRequest, res:Response){
         
@@ -174,6 +209,24 @@ class CartsController{
         }
  
 
+    }
+
+
+    async toList(req:AuthRequest, res:Response){
+        const userId = req.userId;
+        if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"});
+
+        const usersCollection = db.collection<UserEntity>('users');
+        const thisUser = await usersCollection.findOne<UserEntity>({ _id: new ObjectId(userId) });
+
+        if (!thisUser) return res.status(404).json({ mensagem: "Usuário não encontrado" });
+
+        if(!thisUser.adm) return res.status(403).json({mensagem: "Sem permissão"});
+
+        //gostei que da pra organizar com o sort : ) no caso está os mais recentes primiero
+        const carts = await db.collection<CartEntity>("carts").find().sort({dataAtualizacao: -1}).toArray()
+        
+        return res.status(200).json({mensagem: "lista de carrinhos", carts: carts});
     }
 
 
