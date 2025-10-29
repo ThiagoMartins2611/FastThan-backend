@@ -6,6 +6,7 @@ import bcrypt from "bcrypt"
 import jwt  from "jsonwebtoken"
 import { AuthRequest } from "../../middlewares/authRequest.js";
 import { ObjectId } from "bson";
+import Admin from "./adminVerify.js";
 
 
 function randomNumber(min:number, max:number) {
@@ -77,21 +78,16 @@ class UserController{
 
     async deleteUser(req:AuthRequest, res:Response){
 
-        const {DeletedUser} = req.body as {DeletedUser:string};
+        const {DeletedUserId} = req.body as {DeletedUserId:string};
 
-        const thisUserId = req.userId;
-        if(!thisUserId) return res.status(401).send({mensagem: "usuario ID não encontrado"});
+        if(!(await Admin.Verify(req))){
 
-        const usersCollection = db.collection<UserEntity>('users');
-        const thisUser = await usersCollection.findOne<UserEntity>({ _id: new ObjectId(thisUserId) });
-
-        if (!thisUser) return res.status(404).json({ mensagem: "Usuário não encontrado" });
-
-        if(!thisUser.adm) return res.status(403).json({mensagem: "Sem permissão"});
+            return res.status(401).send({mensagem: "Acesso negado"});
+            
+        } 
 
 
-
-        const resul = await db.collection("users").deleteOne({userId: DeletedUser});
+        const resul = await db.collection("users").deleteOne({userId: DeletedUserId});
 
         if(!resul.acknowledged){
             return res.status(401).send({mensagem: "usuario falhou em ser apagado"});

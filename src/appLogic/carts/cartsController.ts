@@ -6,8 +6,7 @@ import { AuthRequest } from "../../middlewares/authRequest.js";
 import Cart from "./cartEntity.js";
 import ItemCart from "./itemCart.js";
 import CartEntity from "./cartEntity.js";
-import UserEntity from "../users/userEntity.js";
-import itemEntity from "../items/itemEntity.js";
+import Admin from "../users/adminVerify.js";
 
 
 
@@ -213,15 +212,11 @@ class CartsController{
 
 
     async toList(req:AuthRequest, res:Response){
-        const userId = req.userId;
-        if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"});
 
-        const usersCollection = db.collection<UserEntity>('users');
-        const thisUser = await usersCollection.findOne<UserEntity>({ _id: new ObjectId(userId) });
-
-        if (!thisUser) return res.status(404).json({ mensagem: "Usuário não encontrado" });
-
-        if(!thisUser.adm) return res.status(403).json({mensagem: "Sem permissão"});
+        if(!(await Admin.Verify(req))){
+                
+            return res.status(401).send({mensagem: "Acesso negado"});  
+        } 
 
         //gostei que da pra organizar com o sort : ) no caso está os mais recentes primiero
         const carts = await db.collection<CartEntity>("carts").find().sort({dataAtualizacao: -1}).toArray()
