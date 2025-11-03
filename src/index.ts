@@ -13,9 +13,12 @@ app.use(express.json());
 
 
 //routes
-app.use(unauthenticatedRoutes);
+app.use("/public", unauthenticatedRoutes);
+
+
 app.use(Auth.userAuth);
-app.use(authenticatedRoutes);
+
+app.use("/private", authenticatedRoutes);
 
 
 app.listen(8000,()=>{
