@@ -60,7 +60,7 @@ class ItemController{
 
     async updateItem(req: AuthRequest, res: Response) {
 
-        const { itemId, name, price, imageUrl, description } = req.body as { itemId: string, name: string, price: number, imageUrl: string, description: string };
+        const { _id, name, price, imageUrl, description } = req.body as { _id: string, name: string, price: number, imageUrl: string, description: string };
 
 
         if (!(await Admin.Verify(req))) {
@@ -69,7 +69,7 @@ class ItemController{
         }
 
 
-        if (!ObjectId.isValid(itemId)) {
+        if (!ObjectId.isValid(_id)) {
 
             return res.status(400).send({ mensagem: "ID de item inválido" });
         }
@@ -82,7 +82,7 @@ class ItemController{
         if(description) updateFields.description = description;
 
         const result = await db.collection("items").updateOne(
-            { _id: new ObjectId(itemId) },
+            { _id: new ObjectId(_id) },
             { $set: updateFields }
         );
 
