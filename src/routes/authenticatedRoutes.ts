@@ -18,8 +18,10 @@ authenticatedRoutes.get("/ShowCart", cartsController.toList);
 //listar usuarios (adm)
 authenticatedRoutes.get("/ShowUsers", userController.toList);
 
-//listar apagar usuarios (adm)
+//apagar usuarios (adm)
 authenticatedRoutes.delete("/deleteUser", userController.deleteUser);
+
+
 
 
 //Items
@@ -31,7 +33,7 @@ authenticatedRoutes.post("/AddItemsForSale", itemsController.add);
 authenticatedRoutes.put("/UpdateItem", itemsController.updateItem);
 
 //deletar item (adm)
-authenticatedRoutes.delete("/DeleteItem", itemsController.deleteItem);
+authenticatedRoutes.post("/DeleteItem", itemsController.deleteItem);
 
 
 
