@@ -46,10 +46,10 @@ authenticatedRoutes.get("/ShowItemsInCart", cartsController.toListItem);
 authenticatedRoutes.post("/AddItemsInCart", cartsController.addItem);
 
 //remover o item do carrinho
-authenticatedRoutes.post("removeItemofCart", cartsController.removeItem);
+authenticatedRoutes.post("/removeItemofCart", cartsController.removeItem);
 
 //remover o carrinho da existencia
-authenticatedRoutes.delete("eraseCart", cartsController.eraseCart);
+authenticatedRoutes.delete("/eraseCart", cartsController.eraseCart);
 
 //atualizar a quantidade do item dentro do carrinho
 authenticatedRoutes.patch("/UpdateQuantityofCart", cartsController.updatequantity);
