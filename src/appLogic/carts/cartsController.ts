@@ -88,42 +88,14 @@ class CartsController{
 
     async toListItem(req:AuthRequest, res:Response){
         const userId = req.userId;
-        const filter = req.query.filter;
 
         if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"})
 
         const Cart = await db.collection<Cart>('carts').findOne({userId: userId});
         if(!Cart) return res.status(401).send({mensagem: "carrinho com esse id de usuario não encontrado"})
 
-        const itemsCart = (Cart.items);
-
-        switch(filter){
-
-            case "":
-                res.status(200).json(itemsCart);
-            break;
-
-            case "maisCaro":
-                res.status(200).json(itemsCart.sort((a, b)=> b.price - a.price));
-            break;
-
-            case "menosCaro":
-                res.status(200).json(itemsCart.sort((a, b)=> a.price - b.price));
-            break;
-
-            case "maiorQuantidade": 
-                res.status(200).json(itemsCart.sort((a, b)=> b.quantity - a.quantity ));
-            break;
-
-            case "menorQuantidade":
-                res.status(200).json(itemsCart.sort((a, b)=> a.quantity - b.quantity));
-            break;
-
-            default: 
-                res.status(200).json(itemsCart);
-            break;
-
-        }
+    
+        res.status(200).json(Cart);
 
     }
 
