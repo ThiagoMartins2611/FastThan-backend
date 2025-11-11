@@ -52,7 +52,7 @@ authenticatedRoutes.post("/removeItemofCart", cartsController.removeItem);
 authenticatedRoutes.delete("/eraseCart", cartsController.eraseCart);
 
 //atualizar a quantidade do item dentro do carrinho
-authenticatedRoutes.patch("/UpdateQuantityofCart", cartsController.updatequantity);
+authenticatedRoutes.post("/UpdateQuantityofCart", cartsController.updatequantity);
 
 
 
