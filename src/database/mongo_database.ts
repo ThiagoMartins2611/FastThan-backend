@@ -1,29 +1,30 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
+// src/database/mongo_database.ts
+import { MongoClient, Db } from "mongodb";
 
-const uri = process.env.MONGO_URI;
-
-if (!uri) {
-  throw new Error("❌ A variável de ambiente MONGO_URI não foi definida.");
+// 👇 Adicione isto antes de usar globalThis
+declare global {
+  // Aqui estamos dizendo ao TypeScript que globalThis pode ter essa propriedade
+  var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-  tls: true, // força uso de conexão segura
-  tlsAllowInvalidCertificates: true, // evita falhas de handshake no Render
-  serverSelectionTimeoutMS: 30000,
-});
+const uri = process.env.MONGO_URI!;
+const dbName = process.env.MONGO_DB!;
 
-try {
-  await client.connect();
-  console.log("✅ Conectado ao MongoDB Atlas com sucesso!");
-} catch (error) {
-  console.error("❌ Erro ao conectar ao MongoDB Atlas:", error);
+if (!uri || !dbName) {
+  throw new Error("As variáveis de ambiente MONGO_URI e MONGO_DB são obrigatórias!");
 }
 
-const db = client.db(process.env.MONGO_DB);
+const client = new MongoClient(uri);
+
+// 👇 Usa cache global para evitar múltiplas conexões durante o hot-reload (tipo Next.js)
+if (!globalThis._mongoClientPromise) {
+  globalThis._mongoClientPromise = client.connect().then(() => {
+    console.log("✅ MongoDB conectado (global)");
+    return client;
+  });
+}
+
+const clientPromise = globalThis._mongoClientPromise;
+const db = (await clientPromise).db(dbName);
 
 export default db;
