@@ -7,7 +7,7 @@ import Cart from "./cartEntity.js";
 import ItemCart from "./itemCart.js";
 import CartEntity from "./cartEntity.js";
 import Admin from "../users/adminVerify.js";
-
+import UserEntity from "../users/userEntity.js";
 
 
 interface ItemDTO {
@@ -27,8 +27,9 @@ class CartsController{
         const userId = req.userId;
 
         if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"})
-
+        
         const result = await db.collection('carts').find({userId: userId}).toArray();
+        const user = await db.collection<UserEntity>('users').findOne({_id: new ObjectId(userId)})
 
         const item:ItemDTO | null = await db.collection<ItemDTO>('items').findOne({_id:ObjectId.createFromHexString(itemId)});
 
@@ -46,6 +47,7 @@ class CartsController{
             
             const newCart = {
                 userId:userId,
+                userName: user?.name,
                 items: [itemCart],
                 dataAtualizacao: new Date(),
                 total: itemCart.price*quantityItem
@@ -193,6 +195,7 @@ class CartsController{
         //gostei que da pra organizar com o sort : ) no caso está os mais recentes primiero
         const carts = await db.collection<CartEntity>("carts").find().sort({dataAtualizacao: -1}).toArray()
         
+
         return res.status(200).json({mensagem: "lista de carrinhos", carts: carts});
     }
 
@@ -201,7 +204,7 @@ class CartsController{
         
         const userId = req.userId;
 
-        if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"})
+        if(!userId) return res.status(401).send({mensagem: "Carrinho já foi apagado"})
 
         const resul = await db.collection("carts").deleteOne({userId: userId});
 
