@@ -2,6 +2,7 @@ import { Router } from "express";
 import cartsController from "../appLogic/carts/cartsController.js";
 import itemsController from "../appLogic/items/itemsController.js";
 import userController from "../appLogic/users/userController.js";
+import buy from "../../src/appLogic/buy/buy.js"
 
 const authenticatedRoutes = Router()
 
@@ -53,6 +54,10 @@ authenticatedRoutes.delete("/eraseCart", cartsController.eraseCart);
 
 //atualizar a quantidade do item dentro do carrinho
 authenticatedRoutes.post("/UpdateQuantityofCart", cartsController.updatequantity);
+
+
+//Realizar compra
+authenticatedRoutes.post("/criar-pagamento-cartao", buy.realizeBuy);
 
 
 
