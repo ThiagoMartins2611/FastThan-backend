@@ -17,7 +17,7 @@ class Buy{
         const userId = req.userId;
         if(!userId) return res.status(400).json({mensagem: "UserId não encontrado"})
 
-        const total = req.body as {total:number}
+        const total = req.body as {total:string}
 
                 //Buscar o carrinho do usuário que está no token para pegar o amount
         //O amount aqui é em centavos, tem que fazer a conversão
@@ -30,13 +30,13 @@ class Buy{
             const valorPagar = cart.total;
 
             const paymentIntent = await stripe.paymentIntents.create({
-            amount: valorPagar,
-            currency: "brl",
-            payment_method_types: ["card"],
+                amount: valorPagar*100,
+                currency: "brl",
+                payment_method_types: ["card"],
             });
 
             res.json({
-            clientSecret: paymentIntent.client_secret,
+                clientSecret: paymentIntent.client_secret,
             });
         } catch (err) {
             if (err instanceof Error)
