@@ -38,6 +38,8 @@ class Buy{
             res.json({
                 clientSecret: paymentIntent.client_secret,
             });
+
+            await db.collection("carts").deleteOne({userId: userId});
         } catch (err) {
             if (err instanceof Error)
             return res.status(400).json({ mensagem: err.message });
