@@ -194,7 +194,9 @@ class CartsController{
 
         //gostei que da pra organizar com o sort : ) no caso está os mais recentes primiero
         const carts = await db.collection<CartEntity>("carts").find().sort({dataAtualizacao: -1}).toArray()
-        
+        if(!carts){
+            res.status(400).send({mensagem: "carrinho não encontrado"});  
+        }
 
         return res.status(200).json({mensagem: "lista de carrinhos", carts: carts});
     }
