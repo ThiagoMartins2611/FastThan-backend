@@ -17,6 +17,8 @@ class Buy{
         const userId = req.userId;
         if(!userId) return res.status(400).json({mensagem: "UserId não encontrado"})
 
+        const total = req.body as {total:number}
+
                 //Buscar o carrinho do usuário que está no token para pegar o amount
         //O amount aqui é em centavos, tem que fazer a conversão
         try {
