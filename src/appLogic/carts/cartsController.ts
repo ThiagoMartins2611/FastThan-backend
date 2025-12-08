@@ -94,7 +94,7 @@ class CartsController{
         if(!userId) return res.status(401).send({mensagem: "usuario ID não encontrado"})
 
         const Cart = await db.collection<Cart>('carts').findOne({userId: userId});
-        if(!Cart) return res.status(401).send({mensagem: "carrinho com esse id de usuario não encontrado"})
+        if(!Cart) return res.status(400).send({mensagem: "carrinho com esse id de usuario não encontrado"})
 
     
         res.status(200).json(Cart);
